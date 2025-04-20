@@ -21,9 +21,7 @@ class ProductController extends Controller
                 'supplier_id' => 'required|exists:suppliers,id',
                 'quantity' => 'required|integer|min:0',
                 'price' => 'required|numeric|min:0',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-                'stock' => 'required|integer|min:0',
-            ]);
+            ]);            
         } catch (ValidationException $e) {
             return response()->json([
                 'status' => 'fail',
@@ -39,9 +37,8 @@ class ProductController extends Controller
             'supplier_id' => $request->supplier_id,
             'quantity' => $request->quantity,
             'price' => $request->price,
-            'image' => $request->image,
-            'stock' => $request->stock,
-        ]);
+            'stock' => $request->quantity, // Készlet = bevitt mennyiség
+        ]);        
 
         return response(json_encode(['succes' => true, 'product' => $product]));
     }
@@ -61,4 +58,29 @@ class ProductController extends Controller
             'success' => true, 'message' => 'Product deleted successfully'
         ]);
     }
+
+    public function useStock(Request $request, $id)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1',
+    ]);
+
+    $product = Product::findOrFail($id);
+
+    if ($product->stock < $request->quantity) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Nincs elég készlet a kivonáshoz.',
+        ], 400);
+    }
+
+    $product->stock -= $request->quantity;
+    $product->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Készlet frissítve.',
+        'stock' => $product->stock,
+    ]);
+}
 }
