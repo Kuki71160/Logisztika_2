@@ -16,10 +16,8 @@ return new class extends Migration
         $table->string('name');
         $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
         $table->foreignId('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
-        $table->integer('quantity')->default(0);
         $table->decimal('price', 10, 2);
-        $table->string('image')->nullable();
-        $table->integer('stock');
+        $table->integer('stock')->nullable();
         $table->timestamps();
     });
 }

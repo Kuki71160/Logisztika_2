@@ -18,10 +18,14 @@ class SupplierController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'contact_email' => 'required|email',
+            'contact_phone' => 'required|string|max:255|min:9'
         ]);
 
         $supplier = Supplier::create([
             'name' => $request->name,
+            'contact_email' => $request->contact_email,
+            'contact_phone' => $request->contact_phone
         ]);
 
         return response()->json(['success' => true, 'supplier' => $supplier]);
@@ -33,9 +37,13 @@ class SupplierController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'contact_email' => 'required|email',
+            'contact_phone' => 'required|string|max:255|min:9'
         ]);
 
         $supplier->name = $request->name;
+        $supplier->contact_phone = $request->contact_phone;
+        $supplier->contact_email = $request->contact_email;
         $supplier->save();
 
         return response()->json(['success' => true, 'supplier' => $supplier]);

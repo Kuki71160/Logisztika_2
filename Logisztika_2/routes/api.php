@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -18,7 +19,7 @@ Route::get('/products', [ProductController::class,'index']);
 
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
-Route::post('/products/create', [ProductController::class, 'store']);
+Route::post('/products', [ProductController::class, 'store']);
 
 Route::put('/products/{id}', [ProductController::class, 'update']);
 
@@ -58,3 +59,6 @@ Route::post('/suppliers', [SupplierController::class, 'store']);
 Route::put('/suppliers/{id}', [SupplierController::class, 'update']);
 
 Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy']);
+
+
+Route::post('/login',[LoginController::class,'store']);
